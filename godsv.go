@@ -97,3 +97,23 @@ func count(line string) int {
 
 	return result
 }
+
+// clean escape out of a row's value
+func clean(value string) string {
+	result := ""
+	literal := false
+	for _, v := range value {
+		switch {
+		case literal:
+			literal = false
+			result += string(v)
+			continue
+		case v == EscapeRune:
+			literal = true
+			continue
+		default:
+			result += string(v)
+		}
+	}
+	return result
+}

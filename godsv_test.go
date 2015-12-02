@@ -52,3 +52,13 @@ func TestCount(t *testing.T) {
 		t.Errorf("Count failed.\nWant: %d\nGot:  %d", expectedResult, result)
 	}
 }
+
+func TestClean(t *testing.T) {
+	sample := "ab\\:cd\\\\e"
+	expectedResult := "ab:cd\\e"
+
+	result := clean(sample)
+	if result != expectedResult {
+		t.Errorf("Clean failed.\nWant: %s\nGot:  %s", expectedResult, result)
+	}
+}
