@@ -56,7 +56,7 @@ func Unmarshal(line string) Row {
 					vs = ve + 1
 				}
 				ve = k
-				row[vi] = line[vs:ve]
+				row[vi] = clean(line[vs:ve])
 				vi++
 			}
 		default:
@@ -65,6 +65,12 @@ func Unmarshal(line string) Row {
 			}
 		}
 	}
+
+	if ve != 0 {
+		vs = ve + 1
+	}
+	ve = len(line)
+	row[vi] = clean(line[vs:ve])
 
 	return row
 }
