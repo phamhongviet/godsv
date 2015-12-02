@@ -41,28 +41,20 @@ func Unmarshal(line string) Row {
 	for k, v := range line {
 		switch {
 		case literal:
-			{
-				literal = false
-				continue
-			}
+			literal = false
+			continue
 		case v == EscapeRune:
-			{
-				literal = true
-				continue
-			}
+			literal = true
+			continue
 		case v == DelimiterRune:
-			{
-				if ve != 0 {
-					vs = ve + 1
-				}
-				ve = k
-				row[vi] = clean(line[vs:ve])
-				vi++
+			if ve != 0 {
+				vs = ve + 1
 			}
+			ve = k
+			row[vi] = clean(line[vs:ve])
+			vi++
 		default:
-			{
-				continue
-			}
+			continue
 		}
 	}
 
@@ -83,19 +75,13 @@ func count(line string) int {
 	for _, v := range line {
 		switch {
 		case literal:
-			{
-				literal = false
-				continue
-			}
+			literal = false
+			continue
 		case v == EscapeRune:
-			{
-				literal = true
-				continue
-			}
+			literal = true
+			continue
 		case v == DelimiterRune:
-			{
-				result++
-			}
+			result++
 		default:
 			continue
 		}
