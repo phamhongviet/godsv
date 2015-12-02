@@ -9,10 +9,14 @@ type Row []string
 
 // Delimiter separate values from each other. Delimiter is traditionally a colon, escape with a backslash
 const Delimiter = ":"
+
+// DelimiterRune is a delimiter as a rune
 const DelimiterRune = ':'
 
 // Escape is the character use for escaping delimiter in values
 const Escape = "\\"
+
+// EscapeRune is an escape as a rune
 const EscapeRune = '\\'
 
 // Marshal encode a Row into a line in DSV file
@@ -49,7 +53,7 @@ func count(line string) int {
 			}
 		case v == DelimiterRune:
 			{
-				result += 1
+				result++
 			}
 		}
 	}
