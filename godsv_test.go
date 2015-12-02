@@ -22,7 +22,6 @@ func TestMarshal(t *testing.T) {
 	return
 }
 
-/*
 func TestUnmarshal(t *testing.T) {
 	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
 	expectedResult := Row{
@@ -37,12 +36,12 @@ func TestUnmarshal(t *testing.T) {
 	result := Unmarshal(sample)
 	for k, v := range expectedResult {
 		if result[k] != v {
-			t.Errorf("Unmarshal failed")
+			t.Errorf("Unmarshal failed.\nWant: %s\nGot:  %s", expectedResult[k], result[k])
+			return
 		}
 	}
 	return
 }
-*/
 
 func TestCount(t *testing.T) {
 	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"

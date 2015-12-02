@@ -31,7 +31,42 @@ func Marshal(row Row) string {
 
 // Unmarshal decode a line in DSV file into a Row
 func Unmarshal(line string) Row {
-	return nil
+	size := count(line)
+	row := make(Row, size)
+
+	literal := false
+	vi := 0 // value index
+	vs := 0 // value start
+	ve := 0 // value end
+	for k, v := range line {
+		switch {
+		case literal:
+			{
+				literal = false
+				continue
+			}
+		case v == EscapeRune:
+			{
+				literal = true
+				continue
+			}
+		case v == DelimiterRune:
+			{
+				if ve != 0 {
+					vs = ve + 1
+				}
+				ve = k
+				row[vi] = line[vs:ve]
+				vi++
+			}
+		default:
+			{
+				continue
+			}
+		}
+	}
+
+	return row
 }
 
 // count delimiters in line
@@ -55,6 +90,8 @@ func count(line string) int {
 			{
 				result++
 			}
+		default:
+			continue
 		}
 	}
 
