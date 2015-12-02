@@ -24,7 +24,7 @@ func TestMarshal(t *testing.T) {
 
 /*
 func TestUnmarshal(t *testing.T) {
-	sample := "abc:def:ghk::ab\\:cd:ef\\gh"
+	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
 	expectedResult := Row{
 		"abc",
 		"def",
@@ -43,3 +43,13 @@ func TestUnmarshal(t *testing.T) {
 	return
 }
 */
+
+func TestCount(t *testing.T) {
+	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
+	expectedResult := 6
+
+	result := count(sample)
+	if result != expectedResult {
+		t.Errorf("Count failed.\nWant: %d\nGot:  %d", expectedResult, result)
+	}
+}
