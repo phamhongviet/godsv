@@ -94,41 +94,7 @@ func count(line string) int {
 
 // clean escape out of a row's value
 func clean(value string) string {
-	// get the size of the clean value
-	size := 0
-	literal := false
-	for _, v := range value {
-		switch {
-		case literal:
-			literal = false
-			size++
-		case v == EscapeRune:
-			literal = true
-		default:
-			size++
-		}
-	}
-
-	// make clean value
-	result := make([]rune, size)
-	ri := 0
-	literal = false
-	for _, v := range value {
-		if ri >= size {
-			break
-		}
-		switch {
-		case literal:
-			literal = false
-			result[ri] = v
-			ri++
-		case v == EscapeRune:
-			literal = true
-		default:
-			result[ri] = v
-			ri++
-		}
-	}
-
+	result := strings.Replace(value, Escape+Delimiter, Delimiter, -1)
+	result = strings.Replace(result, Escape+Escape, Escape, -1)
 	return string(result)
 }
