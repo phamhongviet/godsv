@@ -2,7 +2,7 @@ package godsv
 
 import (
 	"fmt"
-	"testing"
+	"strings"
 )
 
 func ExampleMarshal() {
@@ -18,25 +18,11 @@ func ExampleMarshal() {
 	// Output: abc:def:ghk::ab\:cd:ef\\gh
 }
 
-func TestUnmarshal(t *testing.T) {
+func ExampleUnmarshal() {
 	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
-	expectedResult := Row{
-		"abc",
-		"def",
-		"ghk",
-		"",
-		"ab:cd",
-		"ef\\gh",
-	}
-
 	result := Unmarshal(sample)
-	for k, v := range expectedResult {
-		if result[k] != v {
-			t.Errorf("Unmarshal failed.\nWant: %s\nGot:  %s", expectedResult[k], result[k])
-			return
-		}
-	}
-	return
+	fmt.Println(strings.Join(result, " "))
+	// Output: abc def ghk  ab:cd ef\gh
 }
 
 func ExampleCount() {
