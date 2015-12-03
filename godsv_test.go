@@ -1,10 +1,11 @@
 package godsv
 
 import (
+	"fmt"
 	"testing"
 )
 
-func TestMarshal(t *testing.T) {
+func ExampleMarshal() {
 	sample := Row{
 		"abc",
 		"def",
@@ -13,13 +14,8 @@ func TestMarshal(t *testing.T) {
 		"ab:cd",
 		"ef\\gh",
 	}
-	expectedResult := "abc:def:ghk::ab\\:cd:ef\\\\gh"
-
-	result := Marshal(sample)
-	if expectedResult != result {
-		t.Errorf("Marshal failed.\nWant: %s\nGot: %s", expectedResult, result)
-	}
-	return
+	fmt.Println(Marshal(sample))
+	// Output: abc:def:ghk::ab\:cd:ef\\gh
 }
 
 func TestUnmarshal(t *testing.T) {
@@ -43,22 +39,14 @@ func TestUnmarshal(t *testing.T) {
 	return
 }
 
-func TestCount(t *testing.T) {
+func ExampleCount() {
 	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
-	expectedResult := 6
-
-	result := count(sample)
-	if result != expectedResult {
-		t.Errorf("Count failed.\nWant: %d\nGot:  %d", expectedResult, result)
-	}
+	fmt.Printf("%d\n", count(sample))
+	// Output: 6
 }
 
-func TestClean(t *testing.T) {
+func ExampleClean() {
 	sample := "ab\\:cd\\\\e"
-	expectedResult := "ab:cd\\e"
-
-	result := clean(sample)
-	if result != expectedResult {
-		t.Errorf("Clean failed.\nWant: %s\nGot:  %s", expectedResult, result)
-	}
+	fmt.Println(clean(sample))
+	// Output: ab:cd\e
 }
