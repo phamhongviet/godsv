@@ -66,3 +66,17 @@ func BenchmarkUnmarshal(b *testing.B) {
 		Unmarshal(sample)
 	}
 }
+
+func BenchmarkCount(b *testing.B) {
+	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
+	for i := 0; i < b.N; i++ {
+		count(sample)
+	}
+}
+
+func BenchmarkClean(b *testing.B) {
+	sample := "ab\\:cd\\\\e"
+	for i := 0; i < b.N; i++ {
+		clean(sample)
+	}
+}
