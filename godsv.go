@@ -21,12 +21,14 @@ const EscapeRune = '\\'
 
 // Marshal encode a Row into a line in DSV file
 func Marshal(row Row) string {
+	tempRow := make(Row, len(row))
 	for k, v := range row {
+		tempRow[k] = v
 		// escape special characters (Delimiter and Escape itself)
-		v = strings.Replace(v, Escape, Escape+Escape, -1)
-		row[k] = strings.Replace(v, Delimiter, Escape+Delimiter, -1)
+		tempRow[k] = strings.Replace(v, Escape, Escape+Escape, -1)
+		tempRow[k] = strings.Replace(tempRow[k], Delimiter, Escape+Delimiter, -1)
 	}
-	return strings.Join(row, Delimiter)
+	return strings.Join(tempRow, Delimiter)
 }
 
 // Unmarshal decode a line in DSV file into a Row
