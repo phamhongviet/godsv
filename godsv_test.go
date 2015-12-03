@@ -3,6 +3,7 @@ package godsv
 import (
 	"fmt"
 	"strings"
+	"testing"
 )
 
 func ExampleMarshal() {
@@ -35,4 +36,25 @@ func ExampleClean() {
 	sample := "ab\\:cd\\\\e"
 	fmt.Println(clean(sample))
 	// Output: ab:cd\e
+}
+
+func BenchmarkMarshal(b *testing.B) {
+	sample := Row{
+		"abc",
+		"def",
+		"ghk",
+		"",
+		"ab:cd",
+		"ef\\gh",
+	}
+	for i := 0; i < b.N; i++ {
+		Marshal(sample)
+	}
+}
+
+func BenchmarkUnmarshal(b *testing.B) {
+	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
+	for i := 0; i < b.N; i++ {
+		Unmarshal(sample)
+	}
 }
