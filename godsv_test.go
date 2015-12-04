@@ -15,7 +15,8 @@ func ExampleMarshal() {
 		"ab:cd",
 		"ef\\gh",
 	}
-	fmt.Println(Marshal(sample))
+	dsv := New()
+	fmt.Println(dsv.Marshal(sample))
 	fmt.Println(strings.Join(sample, " "))
 	// Output: abc:def:ghk::ab\:cd:ef\\gh
 	// abc def ghk  ab:cd ef\gh
@@ -23,7 +24,8 @@ func ExampleMarshal() {
 
 func ExampleUnmarshal() {
 	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
-	result := Unmarshal(sample)
+	dsv := New()
+	result := dsv.Unmarshal(sample)
 	fmt.Println(strings.Join(result, " "))
 	fmt.Println(sample)
 	// Output: abc def ghk  ab:cd ef\gh
@@ -32,7 +34,8 @@ func ExampleUnmarshal() {
 
 func ExampleCut() {
 	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
-	result, leftover := cut(sample)
+	dsv := New()
+	result, leftover := dsv.cut(sample)
 	fmt.Println(result)
 	fmt.Println(leftover)
 	// Output: abc
@@ -41,7 +44,8 @@ func ExampleCut() {
 
 func ExampleCount() {
 	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
-	fmt.Printf("%d\n", count(sample))
+	dsv := New()
+	fmt.Printf("%d\n", dsv.count(sample))
 	fmt.Println(sample)
 	// Output: 6
 	// abc:def:ghk::ab\:cd:ef\\gh
@@ -49,7 +53,8 @@ func ExampleCount() {
 
 func ExampleClean() {
 	sample := "ab\\:cd\\\\e"
-	fmt.Println(clean(sample))
+	dsv := New()
+	fmt.Println(dsv.clean(sample))
 	fmt.Println(sample)
 	// Output: ab:cd\e
 	// ab\:cd\\e
@@ -64,28 +69,32 @@ func BenchmarkMarshal(b *testing.B) {
 		"ab:cd",
 		"ef\\gh",
 	}
+	dsv := New()
 	for i := 0; i < b.N; i++ {
-		Marshal(sample)
+		dsv.Marshal(sample)
 	}
 }
 
 func BenchmarkUnmarshal(b *testing.B) {
 	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
+	dsv := New()
 	for i := 0; i < b.N; i++ {
-		Unmarshal(sample)
+		dsv.Unmarshal(sample)
 	}
 }
 
 func BenchmarkCount(b *testing.B) {
 	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
+	dsv := New()
 	for i := 0; i < b.N; i++ {
-		count(sample)
+		dsv.count(sample)
 	}
 }
 
 func BenchmarkClean(b *testing.B) {
 	sample := "ab\\:cd\\\\e"
+	dsv := New()
 	for i := 0; i < b.N; i++ {
-		clean(sample)
+		dsv.clean(sample)
 	}
 }
