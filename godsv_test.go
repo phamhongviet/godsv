@@ -42,8 +42,7 @@ func ExampleCustomMarshal() {
 		"ef\\gh",
 	}
 	dsv := New()
-	dsv.Delimiter = ","
-	dsv.DelimiterRune = ','
+	dsv.Delimiter = ','
 	fmt.Println(dsv.Marshal(sample))
 	fmt.Println(strings.Join(sample, " "))
 	// Output: abc,def,ghk,,ab\,cd,ef\\gh
@@ -53,8 +52,7 @@ func ExampleCustomMarshal() {
 func ExampleCustomUnmarshal() {
 	sample := "abc,def,ghk,,ab\\,cd,ef\\\\gh"
 	dsv := New()
-	dsv.Delimiter = ","
-	dsv.DelimiterRune = ','
+	dsv.Delimiter = ','
 	result := dsv.Unmarshal(sample)
 	fmt.Println(strings.Join(result, " "))
 	fmt.Println(sample)
