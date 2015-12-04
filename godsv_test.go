@@ -32,6 +32,36 @@ func ExampleUnmarshal() {
 	// abc:def:ghk::ab\:cd:ef\\gh
 }
 
+func ExampleCustomMarshal() {
+	sample := Row{
+		"abc",
+		"def",
+		"ghk",
+		"",
+		"ab,cd",
+		"ef\\gh",
+	}
+	dsv := New()
+	dsv.Delimiter = ","
+	dsv.DelimiterRune = ','
+	fmt.Println(dsv.Marshal(sample))
+	fmt.Println(strings.Join(sample, " "))
+	// Output: abc,def,ghk,,ab\,cd,ef\\gh
+	// abc def ghk  ab,cd ef\gh
+}
+
+func ExampleCustomUnmarshal() {
+	sample := "abc,def,ghk,,ab\\,cd,ef\\\\gh"
+	dsv := New()
+	dsv.Delimiter = ","
+	dsv.DelimiterRune = ','
+	result := dsv.Unmarshal(sample)
+	fmt.Println(strings.Join(result, " "))
+	fmt.Println(sample)
+	// Output: abc def ghk  ab,cd ef\gh
+	// abc,def,ghk,,ab\,cd,ef\\gh
+}
+
 func ExampleCut() {
 	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
 	dsv := New()
