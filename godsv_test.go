@@ -30,6 +30,15 @@ func ExampleUnmarshal() {
 	// abc:def:ghk::ab\:cd:ef\\gh
 }
 
+func ExampleCut() {
+	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
+	result, leftover := cut(sample)
+	fmt.Println(result)
+	fmt.Println(leftover)
+	// Output: abc
+	// def:ghk::ab\:cd:ef\\gh
+}
+
 func ExampleCount() {
 	sample := "abc:def:ghk::ab\\:cd:ef\\\\gh"
 	fmt.Printf("%d\n", count(sample))

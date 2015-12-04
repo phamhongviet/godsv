@@ -36,37 +36,37 @@ func Unmarshal(line string) Row {
 	size := count(line)
 	row := make(Row, size)
 
+	for k := range row {
+		row[k], line = cut(line)
+	}
+
+	return row
+}
+
+// cut the first value out of a line
+func cut(line string) (value string, leftover string) {
 	literal := false
-	vi := 0 // value index
-	vs := 0 // value start
-	ve := 0 // value end
+	done := false
+	ve := len(line)
 	for k, v := range line {
 		switch {
 		case literal:
 			literal = false
-			continue
 		case v == EscapeRune:
 			literal = true
-			continue
 		case v == DelimiterRune:
-			if ve != 0 {
-				vs = ve + 1
-			}
+			leftover = line[k+1:]
 			ve = k
-			row[vi] = clean(line[vs:ve])
-			vi++
+			done = true
 		default:
 			continue
 		}
+		if done {
+			break
+		}
 	}
-
-	if ve != 0 {
-		vs = ve + 1
-	}
-	ve = len(line)
-	row[vi] = clean(line[vs:ve])
-
-	return row
+	value = clean(line[0:ve])
+	return value, leftover
 }
 
 // count delimiters in line
