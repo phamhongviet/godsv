@@ -8,8 +8,12 @@ import (
 type Row []string
 
 type DSVParser struct {
-	Delimiter    rune
-	Escape       rune
+	delimiterRune    rune
+	escapeRune       rune
+	escape           string
+	escapedEscape    string
+	delimiter        string
+	escapedDelimiter string
 }
 
 // Delimiter separate values from each other. Delimiter is traditionally a colon, escape with a backslash
@@ -19,24 +23,31 @@ const defaultDelimiter = ':'
 const defaultEscape = '\\'
 
 func New() DSVParser {
-	return DSVParser{defaultDelimiter, defaultEscape}
+	return NewCustom(defaultDelimiter, defaultEscape)
+}
+
+func NewCustom(delimiterRune rune, escapeRune rune) DSVParser {
+	return DSVParser{
+		delimiterRune:    delimiterRune,
+		escapeRune:       escapeRune,
+		escape:           string(escapeRune),
+		escapedEscape:    string(escapeRune) + string(escapeRune),
+		delimiter:        string(delimiterRune),
+		escapedDelimiter: string(escapeRune) + string(delimiterRune),
+	}
 }
 
 // Marshal encode a Row into a line in DSV file
 func (dsv DSVParser) Marshal(row Row) string {
 	tempRow := make(Row, len(row))
-	escape := string(dsv.Escape)
-	escapedEscape := escape + escape
-	delimiter := string(dsv.Delimiter)
-	escapedDelimiter := escape + delimiter
 
 	for k, v := range row {
 		tempRow[k] = v
 		// escape special characters (Delimiter and Escape itself)
-		tempRow[k] = strings.Replace(v, escape, escapedEscape, -1)
-		tempRow[k] = strings.Replace(tempRow[k], delimiter, escapedDelimiter, -1)
+		tempRow[k] = strings.Replace(v, dsv.escape, dsv.escapedEscape, -1)
+		tempRow[k] = strings.Replace(tempRow[k], dsv.delimiter, dsv.escapedDelimiter, -1)
 	}
-	return strings.Join(tempRow, delimiter)
+	return strings.Join(tempRow, dsv.delimiter)
 }
 
 // Unmarshal decode a line in DSV file into a Row
@@ -60,9 +71,9 @@ func (dsv DSVParser) cut(line string) (value string, leftover string) {
 		switch {
 		case literal:
 			literal = false
-		case v == dsv.Escape:
+		case v == dsv.escapeRune:
 			literal = true
-		case v == dsv.Delimiter:
+		case v == dsv.delimiterRune:
 			leftover = line[k+1:]
 			ve = k
 			done = true
@@ -87,10 +98,10 @@ func (dsv DSVParser) count(line string) int {
 		case literal:
 			literal = false
 			continue
-		case v == dsv.Escape:
+		case v == dsv.escapeRune:
 			literal = true
 			continue
-		case v == dsv.Delimiter:
+		case v == dsv.delimiterRune:
 			result++
 		default:
 			continue
@@ -102,12 +113,7 @@ func (dsv DSVParser) count(line string) int {
 
 // clean escape out of a row's value
 func (dsv DSVParser) clean(value string) string {
-	escape := string(dsv.Escape)
-	escapedEscape := escape + escape
-	delimiter := string(dsv.Delimiter)
-	escapedDelimiter := escape + delimiter
-
-	result := strings.Replace(value, escapedDelimiter, delimiter, -1)
-	result = strings.Replace(result, escapedEscape, escape, -1)
+	result := strings.Replace(value, dsv.escapedDelimiter, dsv.delimiter, -1)
+	result = strings.Replace(result, dsv.escapedEscape, dsv.escape, -1)
 	return string(result)
 }
